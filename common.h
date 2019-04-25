@@ -53,7 +53,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define EPS 0.0000000001
 
 static inline void** malloc2d(size_t m, size_t n, size_t size) {
-  void** ret = calloc(m, sizeof(void*));
+  void** ret = (void**)calloc(m, sizeof(void*));
   for(size_t i = 0; i < m; i++)
     ret[i] = calloc(n, size);
   return ret;
@@ -66,7 +66,7 @@ static inline void free2d(void** ptr, size_t m) {
 }
 
 static inline FP_TYPE* fetch_frame(FP_TYPE* x, int nx, int center, int nf) {
-  FP_TYPE* y = calloc(nf, sizeof(FP_TYPE));
+  FP_TYPE* y = (FP_TYPE*)calloc(nf, sizeof(FP_TYPE));
   for(int i = 0; i < nf; i ++) {
     int isrc = center + i - nf / 2;
     y[i] = (isrc >= 0 && isrc < nx) ? x[isrc] : 0;

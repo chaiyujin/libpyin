@@ -2,4 +2,5 @@ build
 *~
 *.o
 *.a
-
+*.wav
+.vscode

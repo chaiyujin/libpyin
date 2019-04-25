@@ -104,11 +104,11 @@ FP_TYPE* pyin_analyze(pyin_config param, FP_TYPE* x, int nx, FP_TYPE fs, int* nf
   int nf = param.nf;
   int yin_w = param.w;
   int nhop = param.nhop;
-  *nfrm = nx / nhop;
+  *nfrm = (nx - nf) / nhop + 1;
   FP_TYPE* ret = calloc(*nfrm, sizeof(FP_TYPE));
   int* pint = calloc(*nfrm, sizeof(int));
   int nd = nf - yin_w;
-  
+
   pyin_semitone_wrapper smtdesc = pyin_wrapper_from_frange(param.fmin, param.fmax);
   smtdesc.nq = param.nq;
 
@@ -118,7 +118,7 @@ FP_TYPE* pyin_analyze(pyin_config param, FP_TYPE* x, int nx, FP_TYPE fs, int* nf
   FP_TYPE** candf = calloc(*nfrm, sizeof(FP_TYPE*)); // refined candidate frequencies
   
   for(int i = 0; i < *nfrm; i ++) {
-    FP_TYPE* xfrm = fetch_frame(x, nx, i * nhop, nf);
+    FP_TYPE* xfrm = fetch_frame(x, nx, i * nhop + nf / 2, nf);
     FP_TYPE xmean = sumfp(xfrm, nf) / nf;
     
     for(int j = 0; j < nf; j ++)
@@ -126,7 +126,7 @@ FP_TYPE* pyin_analyze(pyin_config param, FP_TYPE* x, int nx, FP_TYPE fs, int* nf
     
     int nv = 0;
     FP_TYPE* d = pyin_yincorr(xfrm, nf, yin_w);
-    int* vi = find_valleys(d, nd, 1, 0.01, fs / param.fmax, fs / param.fmin, & nv);
+    int* vi = find_valleys(d, nd, 0.5, 0.01, fs / param.fmax, fs / param.fmin, & nv);
     
     obsrv -> slice[i] = gvps_obsrv_slice_create(nv);
     candf[i] = calloc(nv, sizeof(FP_TYPE));

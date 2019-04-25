@@ -69,21 +69,21 @@ def_singlepass(maxfp, def_max, src[0])
 def_singlepass(minfp, def_min, src[0])
 
 static inline FP_TYPE* hanning(int n) {
-  FP_TYPE* ret = calloc(n, sizeof(FP_TYPE));
+  FP_TYPE* ret = (FP_TYPE*)calloc(n, sizeof(FP_TYPE));
   for(int i = 0; i < n; i ++)
     ret[i] = 0.5 * (1 - cos(2 * M_PI * i / (n - 1)));
   return ret;
 }
 
 static inline FP_TYPE* hamming(int n) {
-  FP_TYPE* ret = calloc(n, sizeof(FP_TYPE));
+  FP_TYPE* ret = (FP_TYPE*)calloc(n, sizeof(FP_TYPE));
   for(int i = 0; i < n; i ++)
     ret[i] = 0.54 - 0.46 * cos(2 * M_PI * i / (n - 1));
   return ret;
 }
 
 static inline FP_TYPE* blackman_harris(int n) {
-  FP_TYPE* ret = calloc(n, sizeof(FP_TYPE));
+  FP_TYPE* ret = (FP_TYPE*)calloc(n, sizeof(FP_TYPE));
   const FP_TYPE a0 = 0.35875;
   const FP_TYPE a1 = 0.48829;
   const FP_TYPE a2 = 0.14128;
